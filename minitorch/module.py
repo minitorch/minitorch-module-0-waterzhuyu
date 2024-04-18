@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 
 class Module:
@@ -31,13 +31,23 @@ class Module:
 
     def train(self) -> None:
         "Set the mode of this module and all descendent modules to `train`."
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        fringe: List[Module] = []
+        fringe.append(self)
+
+        while len(fringe) != 0:
+            tail: Module = fringe.pop()
+            tail.training = True
+            fringe.extend(tail.modules())
 
     def eval(self) -> None:
         "Set the mode of this module and all descendent modules to `eval`."
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        fringe: List[Module] = []
+        fringe.append(self)
+
+        while len(fringe) != 0:
+            tail: Module = fringe.pop()
+            tail.training = False
+            fringe.extend(tail.modules())
 
     def named_parameters(self) -> Sequence[Tuple[str, Parameter]]:
         """
@@ -47,13 +57,40 @@ class Module:
         Returns:
             The name and `Parameter` of each ancestor parameter.
         """
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        named_params: List[Tuple[str, Parameter]] = []
+
+        fringe: List[Tuple[str, Module]] = []
+        fringe.append(("", self))  # first module has no name
+
+        while len(fringe) != 0:
+            name, tail = fringe.pop()
+            module_without_name = list(tail.__dict__["_modules"].items())
+            item_without_module_key = list(tail.__dict__["_parameters"].items())
+            if name == "":
+                fringe.extend(module_without_name)
+                named_params.extend(item_without_module_key)
+                continue
+
+            fringe.extend([(name + "." + key, val) for key, val in module_without_name])
+            named_params.extend(
+                [(name + "." + key, val) for key, val in item_without_module_key]
+            )
+
+        return named_params
 
     def parameters(self) -> Sequence[Parameter]:
         "Enumerate over all the parameters of this module and its descendents."
-        # TODO: Implement for Task 0.4.
-        raise NotImplementedError("Need to implement for Task 0.4")
+        params: List[Parameter] = []
+
+        fringe: List[Module] = []
+        fringe.append(self)
+
+        while len(fringe) != 0:
+            tail: Module = fringe.pop()
+            fringe.extend(tail.modules())
+            params.extend(tail.__dict__["_parameters"].values())
+
+        return params
 
     def add_parameter(self, k: str, v: Any) -> Parameter:
         """
