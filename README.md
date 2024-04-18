@@ -6,3 +6,10 @@
 * Docs: https://minitorch.github.io/
 
 * Overview: https://minitorch.github.io/module0.html
+
+Update on date Apr, 18, 2024.
+
+Upgrade the `streamlit` and `plotly` lib to execute correctly.
+```shell
+$ pip install --upgrade streamlit plotly
+```
