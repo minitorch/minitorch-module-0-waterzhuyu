@@ -32,7 +32,7 @@ def neg(x: float) -> float:
 
 def lt(x: float, y: float) -> float:
     "$f(x) =$ 1.0 if x is less than y else 0.0"
-    return 1.0 if x == y else 0.0
+    return 1.0 if x < y else 0.0
 
 
 def eq(x: float, y: float) -> float:
@@ -99,7 +99,7 @@ def inv(x: float) -> float:
 
 def inv_back(x: float, d: float) -> float:
     r"If $f(x) = 1/x$ compute $d \times f'(x)$"
-    return mul(d, -1 / x ** 2)
+    return mul(d, -1 / x**2)
 
 
 def relu_back(x: float, d: float) -> float:

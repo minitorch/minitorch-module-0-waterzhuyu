@@ -99,7 +99,7 @@ def test_eq(a: float) -> None:
 
 
 @pytest.mark.task0_2
-@given(small_floats)
+@given(small_floats, small_floats)
 def test_sigmoid(a: float, b: float) -> None:
     """Check properties of the sigmoid function, specifically
     * It is always between 0.0 and 1.0.
@@ -113,8 +113,8 @@ def test_sigmoid(a: float, b: float) -> None:
 
     # how to express increasing?
     assert (not a < b) or (
-        sigmoid(a) < sigmoid(b)
-    )  # in logic, we have `A => B` <=> `(not A) or B`
+        sigmoid(a) <= sigmoid(b)
+    )  # in logic, we have `A => B` <=> `(not A) or B`. Why A < B => sigmoid(A) <= sigmoid(B)
 
 
 @pytest.mark.task0_2
@@ -125,6 +125,7 @@ def test_transitive(a: float, b: float, c: float) -> None:
 
 
 @pytest.mark.task0_2
+@given(small_floats, small_floats)
 def test_symmetric(a: float, b: float) -> None:
     """
     Write a test that ensures that :func:`minitorch.operators.mul` is symmetric, i.e.
@@ -134,6 +135,7 @@ def test_symmetric(a: float, b: float) -> None:
 
 
 @pytest.mark.task0_2
+@given(small_floats, small_floats, small_floats)
 def test_distribute(x: float, y: float, z: float) -> None:
     r"""
     Write a test that ensures that your operators distribute, i.e.
